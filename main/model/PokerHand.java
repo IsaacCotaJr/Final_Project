@@ -1,3 +1,4 @@
+
 package model;
 
 import java.util.*;
@@ -11,8 +12,9 @@ public class PokerHand implements Comparable<PokerHand> {
 	private final List<Card> cards;
 
 	public PokerHand(Card c1, Card c2, Card c3, Card c4, Card c5) {
+		// TODO: Build class PokerHand, a week long project
 		this.cards = Arrays.asList(c1, c2, c3, c4, c5);
-
+		Collections.sort(this.cards);
 	}
 
 	@Override
@@ -215,13 +217,11 @@ public class PokerHand implements Comparable<PokerHand> {
 
 	private Rank getHighest() {
 		// TODO Auto-generated method stub
-		Collections.sort(cards);
 		return (Rank) cards.get(cards.size() - 1).getRank();
 	}
 
 	private Rank findFourOfAKindRank() {
 		// TODO Auto-generated method stub
-		Collections.sort(cards);
 		for (int i = 0; i < cards.size() - 3; i++) {
 			if (cards.get(i).getRank() == cards.get(i + 1).getRank()
 					&& cards.get(i).getRank() == cards.get(i + 2).getRank()
@@ -313,10 +313,8 @@ public class PokerHand implements Comparable<PokerHand> {
 	private boolean isPair() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-				if (cards.get(i).getRank() == cards.get(j).getRank()) {
-					return true;
-				}
+			if (cards.get(i).getRank() == cards.get(i + 1).getRank()) {
+				return true;
 			}
 		}
 		return false;
@@ -326,11 +324,8 @@ public class PokerHand implements Comparable<PokerHand> {
 		// TODO Auto-generated method stub
 		int count = 0;
 		for (int i = 0; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-				if (cards.get(i).getRank() == cards.get(j).getRank()) {
-					count++;
-
-				}
+			if (cards.get(i).getRank() == cards.get(i + 1).getRank()) {
+				count++;
 			}
 		}
 
@@ -354,15 +349,6 @@ public class PokerHand implements Comparable<PokerHand> {
 
 	private boolean isStraight() {
 		// TODO Auto-generated method stub
-		Collections.sort(cards);
-
-		// Wheel
-		if (cards.get(0).getRank() == Rank.DEUCE && cards.get(1).getRank() == Rank.THREE
-				&& cards.get(2).getRank() == Rank.THREE && cards.get(3).getRank() == Rank.FOUR
-				&& cards.get(4).getRank() == Rank.FIVE && cards.get(5).getRank() == Rank.ACE) {
-			return true;
-		}
-
 		for (int i = 0; i < cards.size() - 1; i++) {
 			if ((Integer) cards.get(i + 1).getValue() - (Integer) cards.get(i).getValue() != 1) {
 				return false;
@@ -397,7 +383,8 @@ public class PokerHand implements Comparable<PokerHand> {
 		for (int count : rankCount.values()) {
 			if (count == 3) {
 				threeOfAKind = true;
-			} else if (count == 2) {
+			} 
+			if (count == 2) {
 				pair = true;
 			}
 		}
