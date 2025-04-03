@@ -1,3 +1,4 @@
+
 package model;
 
 import java.util.*;
@@ -25,19 +26,10 @@ public class Deck {
 		return cards;
 	}
 
-	public List<Card> dealCommunityCards() {
-		// TODO Auto-generated method stub
-		List<Card> communityCards = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			communityCards.add(cards.remove(0));
-		}
-		return communityCards;
-	}
-
 	public List<Card> dealPlayerCards() {
 		// TODO Auto-generated method stub
 		List<Card> playerCards = new ArrayList<>();
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 5; i++) {
 			playerCards.add(cards.remove(0));
 		}
 		return playerCards;
