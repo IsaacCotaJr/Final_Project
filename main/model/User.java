@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Base64;
 
 public class User {
@@ -17,11 +16,13 @@ public class User {
 	private String hashedPassword;
 	private String saltString;
 	private byte[] salt;
-	
+	public Player player;
+	private double balance;
 
 	// Used when first creating a user
-	public User(String uName, String password) {
+	public User(String uName, String password, double balance) {
 		this.userName = uName;
+		this.balance = 100.0;
 		
 		byte [] s = generateSalt();
 		this.salt = s;
@@ -97,19 +98,24 @@ public class User {
 		return hashedPassword;
 	}
 	
+	public void createPlayer() {
+		this.player = new Player(balance);
+	}
+	
 	// called when a user logs in in the View, so that we don't try to fill in each library
 	// of each user in the registry, since only one will be logged in at a time
-	public void fillUserFromTxt() {
+	public void fillBalanceFromTxt() {
 		try {
 			String fp = "./main/database/users/"+ userName +".txt";
 			BufferedReader in = new BufferedReader(new FileReader(fp));
 			
 			String line;
-			// Goes through username.txt to get library info
+			// Goes through username.txt to get balance
             while ((line = in.readLine()) != null) {
                 String[] l = line.split(",");
-                if (l[0].equals("Album")) {
-                	// Do stuff
+                if (l.length == 1) {
+                	// Is the balance
+                	balance = Double.parseDouble(l[0]);
                 }
                 else {
                 	// is the first line with user login information, do nothing
@@ -139,7 +145,10 @@ public class User {
 	            writer.write(content);
 	            writer.newLine();
 	            
-	           // do stuff
+	            // Write balance to txt file
+	            content = "" + balance; // convert balance to String
+            	writer.write(content); // balance is now second line
+	            writer.newLine();
 	        } 
 		}
 		catch (IOException e) {

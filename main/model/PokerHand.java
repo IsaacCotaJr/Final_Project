@@ -1,4 +1,3 @@
-
 package model;
 
 import java.util.*;
@@ -12,7 +11,6 @@ public class PokerHand implements Comparable<PokerHand> {
 	private final List<Card> cards;
 
 	public PokerHand(Card c1, Card c2, Card c3, Card c4, Card c5) {
-		// TODO: Build class PokerHand, a week long project
 		this.cards = Arrays.asList(c1, c2, c3, c4, c5);
 
 	}
