@@ -6,6 +6,7 @@ public class Player {
 	
 	private double balance;
 	private List<Card> hand;
+	public boolean fold = false;
 	
 	public Player(double balance) {
 		this.balance = balance;
@@ -29,6 +30,26 @@ public class Player {
 	
 	public void subFromBalance(double amount) {
 		balance -= amount;
+	}
+	
+	public void fold() {
+		fold = true;
+	}
+	
+	public void setFold(boolean boo) {
+		fold = boo;
+	}
+	
+	public boolean getFold() {
+		return fold;
+	}
+	
+	public void discardCard(int index) {
+		hand.remove(index);
+	}
+	
+	public void drawCard(Card card) {
+		hand.add(card);
 	}
 
 }
