@@ -23,30 +23,25 @@ public class View extends JFrame{
 
 	public View() {
 		this.uR = new UserRegistry();
-		this.controller = new Controller(new Model());
-		this.setTitle("MVC Demo");
-		this.setSize(400,400);
-		//this.setUp(); // WILL CALL WHEN GAME RUN
+	}
+	
+	public static void main(String[] args) {
+		View view = new View();
+		boolean isLoggedIn = view.login();
+		if (isLoggedIn) {
+			view.run();
+		}
 	}
 	
 	private void setUp() {
 		// The game
+		this.controller = new Controller(new Model());
+		this.setTitle("MVC Demo");
+		this.setSize(400,400);
 		
 		//setting up the main panel
 		JPanel mainPanel = new JPanel();
 		this.add(mainPanel);
-		
-		//setting up the switch button
-		JButton incButton = new JButton("increment");
-		incButton.setActionCommand("inc");
-		//incButton.addActionListener(controller);
-		mainPanel.add(incButton);
-		
-		//setting up the count button
-		JButton decButton = new JButton("decrement");
-		decButton.setActionCommand("dec");
-		//decButton.addActionListener(controller);
-		mainPanel.add(decButton);
 		
 		//adding a window listener for closing the app
 		this.addWindowListener(new WindowAdapter() {
@@ -56,14 +51,6 @@ public class View extends JFrame{
 		});
 		
 		this.setVisible(true);
-	}
-	
-	public static void main(String[] args) {
-		View view = new View();
-		boolean isLoggedIn = view.login();
-		if (isLoggedIn) {
-			view.run();
-		}
 	}
 	
 	public boolean login() {
