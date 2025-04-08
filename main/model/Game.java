@@ -87,7 +87,7 @@ public class Game {
 					if (raiseAmount <= currentBet) raiseAmount = currentBet + 1;
 					player.subFromBalance(raiseAmount);
 					currentBet = raiseAmount;
-					bettingComplete = false; // Continue the loop after a raise
+					bettingComplete = false; // continue to loop after a raise
 				} else {
 					System.out.println("Invalid option, folding.");
 					player.fold();
@@ -106,7 +106,7 @@ public class Game {
 			String response = scanner.next();
 
 			if (response.equalsIgnoreCase("yes")) {
-				scanner.nextLine(); // consume leftover newline
+				scanner.nextLine();
 				System.out.println("Enter up to three indices (space-separated) to discard:");
 				String line = scanner.nextLine();
 				String[] parts = line.split("\\s+");
