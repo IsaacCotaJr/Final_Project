@@ -14,7 +14,7 @@ public class Player {
 		this.isHuman = human;
 	}
 
-	public isHuman(){
+	public boolean isHuman(){
 		return isHuman;
 	}
 	
