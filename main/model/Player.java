@@ -7,9 +7,15 @@ public class Player {
 	private double balance;
 	private List<Card> hand;
 	public boolean fold = false;
+	private boolean isHuman;
 	
-	public Player(double balance) {
+	public Player(double balance, boolean human) {
 		this.balance = balance;
+		this.isHuman = human;
+	}
+
+	public isHuman(){
+		return isHuman;
 	}
 	
 	public void setHand(List<Card> hand) {
