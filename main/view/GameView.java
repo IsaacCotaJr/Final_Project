@@ -26,9 +26,10 @@ import database.*;
 public class GameView extends JFrame{
 	private Controller controller;
 	private JPanel mainPanel;
-	
+	private JButton playAgainButton; // Bassam
+        private JButton exitButton; // Bassam
 	public GameView() {
-		this.controller = new Controller(new Model());
+		this.controller = new Controller(new Model(), this); // Bassam added this
 		this.setTitle("Poker Game");
 		this.setSize(1400,800);
 		this.setLayout(new BorderLayout());
