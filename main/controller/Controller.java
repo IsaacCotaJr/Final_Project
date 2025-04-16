@@ -8,9 +8,11 @@ import model.Observer;
 
 public class Controller implements ActionListener{
 	private Model model;
-
-	public Controller(Model model) {
+	private GameView view; // Bassam
+	//Bassam added GameView for a reference to the view
+	public Controller(Model model, GameView view) {
 		this.model = new Model();
+		this.view = view; // Bassam
 	}
 
 	public void actionPerformed(ActionEvent e) {
