@@ -16,10 +16,11 @@ import controller.Controller;
 import model.*;
 import database.*;
 
-public class View extends JFrame{
+public class View {
 	private Controller controller;
 	private UserRegistry uR;
 	private User u;
+	private GameView game;
 
 	public View() {
 		this.uR = new UserRegistry();
@@ -31,26 +32,6 @@ public class View extends JFrame{
 		if (isLoggedIn) {
 			view.run();
 		}
-	}
-	
-	private void setUp() {
-		// The game
-		this.controller = new Controller(new Model());
-		this.setTitle("MVC Demo");
-		this.setSize(400,400);
-		
-		//setting up the main panel
-		JPanel mainPanel = new JPanel();
-		this.add(mainPanel);
-		
-		//adding a window listener for closing the app
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent windowEvent) {
-				System.exit(0);
-			}
-		});
-		
-		this.setVisible(true);
 	}
 	
 	public boolean login() {
@@ -187,6 +168,28 @@ public class View extends JFrame{
 	
 	public void run() {
 		// display user's information, ask if want to play game or log out
+		System.out.println("Welcome "+ u.getUName().replace("_", " ") +"!");
+		System.out.println("Your current Balance is: " + u.getBalance());
+		System.out.println("Would you like to play a game of Poker? (Yes or no)");
+		
+		Scanner scanner = new Scanner(System.in);
+		String ans = "";
+		
+		while (!(ans.equalsIgnoreCase("yes")) || !(ans.equalsIgnoreCase("yes"))){
+			ans = scanner.nextLine();
+			
+			if(ans.equalsIgnoreCase("yes")) {
+				// should start the game
+				game = new GameView();
+			}
+			else if(ans.equalsIgnoreCase("no")) {
+				break;
+				
+			}
+		}
+		
+		System.out.println("Thank you for using our game!");
+		scanner.close();
+		u.saveUserToFile(); // writes any changes the user had in their balance to their file once the program ends
 	}
-	
 }

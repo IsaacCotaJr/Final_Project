@@ -23,14 +23,14 @@ public class Card implements Comparable<Card> {
 		return rank == other.rank;
 	}
 
-	public Object getRank() {
+	public Rank getRank() {
 		// TODO Auto-generated method stub
 		return rank;
 	}
 
-	public Object getSuit() {
+	public Suit getSuit() {
 		// TODO Auto-generated method stub
-		return (Suit) suit;
+		return suit;
 	}
 
 	public Object getValue() {

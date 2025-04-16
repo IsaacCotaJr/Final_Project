@@ -3,21 +3,13 @@ package model;
 import java.util.ArrayList;
 
 public class Model {
-	private int number;
+	// This will be where the game is, i.e. the Deck, Card, Hand, and other instances of classes will be here
+	
 	private ArrayList<Observer> observers;
+	private Deck deck;
 	
 	public Model() {
 		this.observers = new ArrayList<Observer>();
-	}
-	
-	public void increment() {
-		this.number++;
-		notifyObservers();
-	}
-	
-	public void decrement() {
-		this.number--;
-		notifyObservers();
 	}
 	
 	public void registerObserver(Observer observer) {

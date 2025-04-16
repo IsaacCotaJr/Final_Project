@@ -98,8 +98,12 @@ public class User {
 		return hashedPassword;
 	}
 	
+	public double getBalance() {
+		return balance;
+	}
+	
 	public void createPlayer() {
-		this.player = new Player(balance);
+		this.player = new Player(balance, true);
 	}
 	
 	// called when a user logs in in the View, so that we don't try to fill in each library

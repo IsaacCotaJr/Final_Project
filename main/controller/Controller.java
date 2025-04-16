@@ -13,10 +13,15 @@ public class Controller implements ActionListener{
 		this.model = new Model();
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		
+		if(command.equals("initDraw")) {
+			// draw cards for player/computers using model
+		} 
+		else {
+			
+		}
 	}
 	
 	public void addObserver(Observer observer) {
