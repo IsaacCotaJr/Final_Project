@@ -45,7 +45,7 @@ public class GameView extends JFrame{
         add(mainPanel);
         
         //setting up the draw button
-      	JButton initDrawButton = new JButton("Draw Cards");
+      	 initDrawButton = new JButton("Draw Cards"); // Bassam deleted Jbutton 
       	initDrawButton.setActionCommand("initDraw");
       	initDrawButton.addActionListener(controller);
       	// Once this button is clicked, want it to disappear
@@ -58,6 +58,22 @@ public class GameView extends JFrame{
       	});
       	initDrawButton.setBounds(600, 350, 200, 100);
       	mainPanel.add(initDrawButton);
+		playAgainButton = new JButton("Play Again");
+		
+		// Bassam
+      	playAgainButton.setActionCommand("playAgain"); 
+      	playAgainButton.addActionListener(controller);
+      	playAgainButton.setBounds(550, 450, 150, 50);
+      	playAgainButton.setVisible(false);
+      	mainPanel.add(playAgainButton);
+
+      	exitButton = new JButton("Exit");
+      	exitButton.setActionCommand("exit");
+      	exitButton.addActionListener(controller);
+      	exitButton.setBounds(750, 450, 150, 50);
+      	exitButton.setVisible(false);
+      	mainPanel.add(exitButton); 
+		// Bassam
 		
       	JPanel compHand1 = new JPanel();
       	compHand1.setLayout(new GridLayout(1,5));
