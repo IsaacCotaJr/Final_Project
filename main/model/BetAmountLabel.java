@@ -12,9 +12,9 @@ public class BetAmountLabel extends JLabel implements Observer{
 	}
 	
 	@Override
-	public void update() {
+	public void update(double num, double num2) {
 		// Shows the current bet
-		this.setText("Bet Amount: " + bet);
+		this.setText("Bet Amount: " + num);
 	}
 
 }

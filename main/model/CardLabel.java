@@ -39,7 +39,7 @@ public class CardLabel extends JLabel implements Observer{
 	}
 	
 	@Override
-	public void update() {
+	public void update(double num, double num2) {
 		String fileStart = "./main/model/CardPhotos";
 		// Change the image
 		if (showFace) {

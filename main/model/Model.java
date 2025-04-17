@@ -7,6 +7,8 @@ public class Model {
 	
 	private ArrayList<Observer> observers;
 	private Deck deck;
+	private double betAmount;
+	private double userBal;
 	
 	public Model() {
 		this.observers = new ArrayList<Observer>();
@@ -20,10 +22,15 @@ public class Model {
 		this.observers.remove(observer);
 	}
 	
+	public void shuffleAndDeal() {
+		// shuffle deck, deal cards, notify observers
+		
+	}
+	
 	/* PRIVATE METHODS */
 	private void notifyObservers() {
 		for(Observer o : observers) {
-			o.update();
+			o.update(betAmount, userBal);
 		}
 	}
 }

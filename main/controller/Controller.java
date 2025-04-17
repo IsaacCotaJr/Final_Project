@@ -8,11 +8,11 @@ import model.Observer;
 
 public class Controller implements ActionListener{
 	private Model model;
-	private GameView view; // Bassam
+	//private GameView view; // Bassam
 	//Bassam added GameView for a reference to the view
-	public Controller(Model model, GameView view) {
+	public Controller(Model model) {
 		this.model = new Model();
-		this.view = view; // Bassam
+		//this.view = view; // Bassam
 	}
 	// Bassam
 	public void actionPerformed(ActionEvent e) {
@@ -20,11 +20,13 @@ public class Controller implements ActionListener{
 
     if (command.equals("initDraw")) {
         model.shuffleAndDeal();       // Draw cards
-        model.notifyObservers();      // Update UI
-        view.showEndOptions();        // Show play again / exit buttons
+
+        // This will be called inside of Model, don't need to do it here
+        //model.notifyObservers();      // Update UI
+        //view.showEndOptions();        // Show play again / exit buttons
     } 
     else if (command.equals("playAgain")) {
-        view.resetGame();             // Reset everything for a new round
+        //view.resetGame();             // Reset everything for a new round
     } 
     else if (command.equals("exit")) {
         System.exit(0);               // Exit the program

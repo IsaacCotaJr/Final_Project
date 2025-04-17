@@ -180,7 +180,7 @@ public class View {
 			
 			if(ans.equalsIgnoreCase("yes")) {
 				// should start the game
-				game = new GameView();
+				game = new GameView(u);
 			}
 			else if(ans.equalsIgnoreCase("no")) {
 				break;
@@ -190,6 +190,6 @@ public class View {
 		
 		System.out.println("Thank you for using our game!");
 		scanner.close();
-		u.saveUserToFile(); // writes any changes the user had in their balance to their file once the program ends
+		//u.saveUserToFile(); // writes any changes the user had in their balance to their file once the program ends
 	}
 }

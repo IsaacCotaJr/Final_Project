@@ -26,10 +26,14 @@ import database.*;
 public class GameView extends JFrame{
 	private Controller controller;
 	private JPanel mainPanel;
+	private JButton initDrawButton;
 	private JButton playAgainButton; // Bassam
-        private JButton exitButton; // Bassam
-	public GameView() {
-		this.controller = new Controller(new Model(), this); // Bassam added this
+    private JButton exitButton; // Bassam
+    private User u;
+    
+	public GameView(User user) {
+		this.controller = new Controller(new Model()); // Bassam added this
+		this.u = user;
 		this.setTitle("Poker Game");
 		this.setSize(1400,800);
 		this.setLayout(new BorderLayout());
@@ -45,7 +49,7 @@ public class GameView extends JFrame{
         add(mainPanel);
         
         //setting up the draw button
-      	 initDrawButton = new JButton("Draw Cards"); // Bassam deleted Jbutton 
+      	initDrawButton = new JButton("Draw Cards"); 
       	initDrawButton.setActionCommand("initDraw");
       	initDrawButton.addActionListener(controller);
       	// Once this button is clicked, want it to disappear
@@ -58,20 +62,27 @@ public class GameView extends JFrame{
       	});
       	initDrawButton.setBounds(600, 350, 200, 100);
       	mainPanel.add(initDrawButton);
-		playAgainButton = new JButton("Play Again");
+		
+      	playAgainButton = new JButton("Play Again");
 		
 		// Bassam
       	playAgainButton.setActionCommand("playAgain"); 
       	playAgainButton.addActionListener(controller);
       	playAgainButton.setBounds(550, 450, 150, 50);
-      	playAgainButton.setVisible(false);
+      	playAgainButton.setVisible(true);
       	mainPanel.add(playAgainButton);
 
       	exitButton = new JButton("Exit");
       	exitButton.setActionCommand("exit");
       	exitButton.addActionListener(controller);
+      	exitButton.addActionListener(new ActionListener() {
+      		@Override
+      		public void actionPerformed(ActionEvent e) {
+      			u.saveUserToFile();
+      		}
+      	});
       	exitButton.setBounds(750, 450, 150, 50);
-      	exitButton.setVisible(false);
+      	exitButton.setVisible(true);
       	mainPanel.add(exitButton); 
 		// Bassam
 		
@@ -105,10 +116,16 @@ public class GameView extends JFrame{
       	playerHand.setBounds(387, 500, 625, 200);
       	mainPanel.add(playerHand);
       	
+      	// Add balance, bet amount labels here
+      	
+      	
+      	
+      	
 		//adding a window listener for closing the app
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
 				System.exit(0);
+				u.saveUserToFile();
 			}
 		});
 		
