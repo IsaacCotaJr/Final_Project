@@ -49,6 +49,7 @@ public class User {
             this.hashedPassword = l[1];
             this.saltString = l[2];
             this.salt = Base64.getDecoder().decode(saltString);
+            createPlayer();
             
             in.close();
 		} 

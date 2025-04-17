@@ -11,7 +11,7 @@ public class Controller implements ActionListener{
 	//private GameView view; // Bassam
 	//Bassam added GameView for a reference to the view
 	public Controller(Model model) {
-		this.model = new Model();
+		this.model = model;
 		//this.view = view; // Bassam
 	}
 	// Bassam

@@ -32,7 +32,7 @@ public class GameView extends JFrame{
     private User u;
     
 	public GameView(User user) {
-		this.controller = new Controller(new Model()); // Bassam added this
+		this.controller = new Controller(new Model(u)); // Bassam added this
 		this.u = user;
 		this.setTitle("Poker Game");
 		this.setSize(1400,800);
@@ -67,7 +67,12 @@ public class GameView extends JFrame{
 		
 		// Bassam
       	playAgainButton.setActionCommand("playAgain"); 
-      	playAgainButton.addActionListener(controller);
+      	playAgainButton.addActionListener(new ActionListener () {
+      		@Override
+      		public void actionPerformed(ActionEvent e) {
+      			setUp();
+      		}
+      	});
       	playAgainButton.setBounds(550, 450, 150, 50);
       	playAgainButton.setVisible(true);
       	mainPanel.add(playAgainButton);
@@ -89,7 +94,7 @@ public class GameView extends JFrame{
       	JPanel compHand1 = new JPanel();
       	compHand1.setLayout(new GridLayout(1,5));
       	for (int i = 0; i < 5; i++) {
-      		CardLabel cl = new CardLabel(); 
+      		CardLabel cl = new CardLabel();
       		controller.addObserver(cl);
       		compHand1.add(cl);
       	}

@@ -7,10 +7,12 @@ public class Model {
 	
 	private ArrayList<Observer> observers;
 	private Deck deck;
+	private User user;
 	private double betAmount;
 	private double userBal;
 	
-	public Model() {
+	public Model(User u) {
+		this.user = u;
 		this.observers = new ArrayList<Observer>();
 	}
 	
