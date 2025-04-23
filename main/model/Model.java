@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 	// This will be where the game is, i.e. the Deck, Card, Hand, and other instances of classes will be here
@@ -10,10 +11,16 @@ public class Model {
 	private User user;
 	private double betAmount;
 	private double userBal;
+	private ArrayList<Player> players;
 	
 	public Model(User u) {
 		this.user = u;
 		this.observers = new ArrayList<Observer>();
+		this.players = new ArrayList<Player>();
+		for (int i = 0; i < 2; i++) {
+			players.add(new Player(100.00, false));
+		}
+		players.add(new Player(100.00, true));
 	}
 	
 	public void registerObserver(Observer observer) {
@@ -24,10 +31,43 @@ public class Model {
 		this.observers.remove(observer);
 	}
 	
+	// isaac
 	public void shuffleAndDeal() {
 		// shuffle deck, deal cards, notify observers
+		deck.shuffle();
+		ArrayList<Card> allPlayerCards = new ArrayList<Card>();
+		for (Player player : players) {
+			List<Card> hand = deck.dealPlayerCards();
+			player.setHand(hand);
+			allPlayerCards.addAll(hand);
+		}
+		for (int i = 0; i < 15; i++) {
+			Card c = allPlayerCards.get(i);
+			CardLabel cl = (CardLabel) observers.get(i);
+			cl.setCardType(c);
+		}
+		notifyObservers();
 		
 	}
+	
+	public ArrayList<Card> drawNewCards(boolean[] toReplace) {
+	    ArrayList<Card> newCards = new ArrayList<>();
+	    Player user = players.get(players.size() - 1); // user is last
+	    List<Card> hand = user.getHand();
+
+	    for (int i = 0; i < 5; i++) {
+	        if (toReplace[i]) {
+	            Card newCard = deck.draw();
+	            newCards.add(newCard);
+	            hand.set(i, newCard); // replace in player's hand
+	        }
+	    }
+
+	    user.setHand(hand); // update hand
+	    notifyObservers();
+	    return newCards;
+	}
+	// isaac
 	
 	/* PRIVATE METHODS */
 	private void notifyObservers() {
