@@ -195,7 +195,35 @@ public class GameView extends JFrame{
 		
 		this.setVisible(true);
 	}
-	
+	// Bassam: Show end-of-game options (Play Again, Exit)
+	public void showEndOptions() {
+	    // Hide main game controls
+	    if (initDrawButton != null) initDrawButton.setVisible(false);
+	    if (drawPhaseButton != null) drawPhaseButton.setVisible(false);
+	    if (difficultyBox != null) difficultyBox.setEnabled(false);
+	    // Show Play Again and Exit buttons
+	    if (playAgainButton != null) playAgainButton.setVisible(true);
+	    if (exitButton != null) exitButton.setVisible(true);
+	}
+
+	// Bassam: Reset the game for a new round
+	public void resetGame() {
+	    // Remove all components from the main panel
+	    if (mainPanel != null) {
+	        mainPanel.removeAll();
+	        mainPanel.revalidate();
+	        mainPanel.repaint();
+	    }
+	    // Reset state variables as needed
+	    canSelectCards = false;
+	    for (int i = 0; i < cardsSelected.length; i++) cardsSelected[i] = false;
+	    playerCardLabels.clear();
+	    // Hide end-of-game buttons
+	    if (playAgainButton != null) playAgainButton.setVisible(false);
+	    if (exitButton != null) exitButton.setVisible(false);
+	    // Re-initialize the game UI
+	    setUp();
+	}
 	// isaac
 	private void setupCardLabels() {
 	    playerCardLabels.clear();
