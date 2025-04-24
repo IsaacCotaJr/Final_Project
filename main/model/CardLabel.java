@@ -45,7 +45,28 @@ public class CardLabel extends JLabel implements Observer{
 		if (showFace) {
 			try {
 				// initialize as the back of a card
-	        	BufferedImage cardImage = ImageIO.read(new File(fileStart + "/" + rank + "_of_" + suit + ".png"));
+				String s = "";
+				if(rank == 11) {
+					s = "jack";
+				}
+				else if(rank == 12) {
+					s = "queen";
+				}
+				else if(rank == 13) {
+					s = "king";
+				}
+				else if(rank == 14) {
+					s = "ace";
+				}
+				
+				
+	        	BufferedImage cardImage;
+	        	if (rank < 11) {
+	        		cardImage = ImageIO.read(new File(fileStart + "/" + rank + "_of_" + suit + ".png"));
+	        	}
+	        	else {
+	        		cardImage = ImageIO.read(new File(fileStart + "/" + s + "_of_" + suit + ".png"));
+	        	}
 	                    
 	            Image resizedImage = cardImage.getScaledInstance(125, 200, Image.SCALE_SMOOTH);
 	            ImageIcon resizedIcon = new ImageIcon(resizedImage);

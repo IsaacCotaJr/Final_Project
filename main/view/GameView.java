@@ -29,17 +29,17 @@ public class GameView extends JFrame{
     private String selectedDifficulty = "Easy"; // Bassam: stores selected difficulty
     private ComputerPlayer computerPlayer; // Bassam: holds computer player instance
 	private Controller controller;
-	private JPanel mainPanel;
+	private JPanel mainPanel = new JPanel();
 	private JButton initDrawButton;
 	private JButton playAgainButton; // Bassam
     private JButton exitButton; // Bassam
     private User u;
     // isaac
-    private JButton drawPhaseButton; // draw phase
+    private JButton drawPhaseButton = new JButton(); // draw phase
     private boolean[] cardsSelected = new boolean[5]; // to track card selection
     private ArrayList<CardLabel> playerCardLabels = new ArrayList<>(); // reference to player hand card labels
     private boolean canSelectCards = false; // player can't select cards
-    private JPanel playerHand = new JPanel();
+    private JPanel playerHand;
     // isaac
     
 	public GameView(User user) {
@@ -61,8 +61,8 @@ public class GameView extends JFrame{
         // Hide end-of-game buttons at setup
         if (playAgainButton != null) playAgainButton.setVisible(false);
         if (exitButton != null) exitButton.setVisible(false);
-		//setting up the main panel
-		mainPanel = new JPanel();
+		
+        //setting up the main panel
         mainPanel.setLayout(null);
         mainPanel.setBackground(Color.BLACK);
 
@@ -81,20 +81,22 @@ public class GameView extends JFrame{
                 ComputerStrategy strategy = selectedDifficulty.equals("Easy") ? new EasyStrategy() : new HardStrategy(); // Bassam: choose strategy
                 computerPlayer = new ComputerPlayer(100.0, strategy); // Bassam: create computer player
                 difficultyBox.setEnabled(false); // Bassam: disable dropdown after game starts
+                difficultyBox.setVisible(false);
+                drawPhaseButton.setVisible(true);
             }
        });
       	initDrawButton.setBounds(600, 350, 200, 100);
       	mainPanel.add(initDrawButton);
       	
       	// isaac
-      	setupCardLabels();                      // show cards, can't select yet
+      	//setupCardLabels();                      // show cards, can't select yet
       	drawPhaseButton.setVisible(false);     // hide draw button until betting finishes
       	drawPhaseButton = new JButton("Draw New Cards");
-      	drawPhaseButton.setBounds(600, 620, 200, 50);
+      	drawPhaseButton.setBounds(600, 350, 200, 50);
       	mainPanel.add(drawPhaseButton);
       	
         
-      	bettingComplete(); // call after first betting round is complete (first betting round would go above this line)
+      	//bettingComplete(); // call after first betting round is complete (first betting round would go above this line)
       	// add listener to perform draw
       	drawPhaseButton.addActionListener(new ActionListener() {
       	    @Override
@@ -105,10 +107,6 @@ public class GameView extends JFrame{
       	// isaac
 		
       	playAgainButton = new JButton("Play Again");
-		
-      	
-      	
-      	
 		// Bassam
       	playAgainButton.setActionCommand("playAgain"); 
       	playAgainButton.addActionListener(new ActionListener () {
@@ -118,7 +116,7 @@ public class GameView extends JFrame{
       		}
       	});
       	playAgainButton.setBounds(550, 450, 150, 50);
-      	playAgainButton.setVisible(true);
+      	playAgainButton.setVisible(false);
       	mainPanel.add(playAgainButton);
 
       	exitButton = new JButton("Exit");
@@ -131,7 +129,7 @@ public class GameView extends JFrame{
       		}
       	});
       	exitButton.setBounds(750, 450, 150, 50);
-      	exitButton.setVisible(true);
+      	exitButton.setVisible(false);
       	mainPanel.add(exitButton); 
 		// Bassam
 		
@@ -155,7 +153,7 @@ public class GameView extends JFrame{
       	compHand2.setBounds(775, 0, 625, 200);
       	mainPanel.add(compHand2);
       	
-      	//JPanel playerHand = new JPanel(); // isaac commented this out to make it private variable in GameView to make it accessible to other functions
+      	JPanel playerHand = new JPanel(); // isaac commented this out to make it private variable in GameView to make it accessible to other functions
       	playerHand.setLayout(new GridLayout(1,5));
       	for (int i = 0; i < 5; i++) {
       		CardLabel cl = new CardLabel(); 
@@ -225,32 +223,32 @@ public class GameView extends JFrame{
 	    setUp();
 	}
 	// isaac
-	private void setupCardLabels() {
-	    playerCardLabels.clear();
-	    playerHand.removeAll(); // in case re-setting the layout
-
-	    for (int i = 0; i < 5; i++) {
-	        CardLabel cl = new CardLabel(); 
-	        controller.addObserver(cl);
-	        final int index = i;
-
-	        // only add listener if selection is enabled
-	        if (canSelectCards) {
-	            cl.addMouseListener(new java.awt.event.MouseAdapter() {
-	                public void mouseClicked(java.awt.event.MouseEvent evt) {
-	                    cardsSelected[index] = !cardsSelected[index];
-	                    cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null); // add yellow border on selected cards
-	                }
-	            });
-	        }
-
-	        playerCardLabels.add(cl);
-	        playerHand.add(cl);
-	    }
-
-	    playerHand.revalidate();
-	    playerHand.repaint();
-	}
+//	private void setupCardLabels() {
+//	    playerCardLabels.clear();
+//	    playerHand.removeAll(); // in case re-setting the layout
+//
+//	    for (int i = 0; i < 5; i++) {
+//	        CardLabel cl = new CardLabel(); 
+//	        controller.addObserver(cl);
+//	        final int index = i;
+//
+//	        // only add listener if selection is enabled
+//	        if (canSelectCards) {
+//	            cl.addMouseListener(new java.awt.event.MouseAdapter() {
+//	                public void mouseClicked(java.awt.event.MouseEvent evt) {
+//	                    cardsSelected[index] = !cardsSelected[index];
+//	                    cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null); // add yellow border on selected cards
+//	                }
+//	            });
+//	        }
+//
+//	        playerCardLabels.add(cl);
+//	        playerHand.add(cl);
+//	    }
+//
+//	    playerHand.revalidate();
+//	    playerHand.repaint();
+//	}
 	
 	private void performDrawPhase() {
 	    ArrayList<Card> newCards = controller.drawNewCards(cardsSelected);
@@ -269,7 +267,7 @@ public class GameView extends JFrame{
 	
 	private void bettingComplete() {
 	    canSelectCards = true; // enable card selection
-	    setupCardLabels();     // re-setup the labels with click listeners
+	    //setupCardLabels();     // re-setup the labels with click listeners
 	    drawPhaseButton.setVisible(true); // now they can draw
 	}
 	// isaac

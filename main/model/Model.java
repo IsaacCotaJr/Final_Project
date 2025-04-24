@@ -21,6 +21,7 @@ public class Model {
 			players.add(new Player(100.00, false));
 		}
 		players.add(new Player(100.00, true));
+		this.deck = new Deck();
 	}
 	
 	public void registerObserver(Observer observer) {
@@ -44,7 +45,13 @@ public class Model {
 		for (int i = 0; i < 15; i++) {
 			Card c = allPlayerCards.get(i);
 			CardLabel cl = (CardLabel) observers.get(i);
+			System.out.println(c);
 			cl.setCardType(c);
+			
+			// if last five cards, are player cards, set visible
+			if (i >= 10) {
+				cl.showFace();
+			}
 		}
 		notifyObservers();
 		
