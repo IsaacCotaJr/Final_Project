@@ -49,7 +49,7 @@ public class Model {
 			cl.setCardType(c);
 			
 			// if last five cards, are player cards, set visible
-			if (i >= 10) {
+			if (i >= 0) { // change to 10, seeing comp hands now
 				cl.showFace();
 			}
 		}
@@ -63,8 +63,11 @@ public class Model {
 	    List<Card> hand = user.getHand();
 
 	    for (int i = 0; i < 5; i++) {
+	    	int a  = i + 10;
 	        if (toReplace[i]) {
+	        	CardLabel cl = (CardLabel) observers.get(a);
 	            Card newCard = deck.draw();
+	            cl.setCardType(newCard);
 	            newCards.add(newCard);
 	            hand.set(i, newCard); // replace in player's hand
 	        }

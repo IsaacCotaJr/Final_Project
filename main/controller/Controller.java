@@ -22,7 +22,7 @@ public class Controller implements ActionListener{
     if (command.equals("initDraw")) {
         model.shuffleAndDeal();       // Draw cards
         //model.notifyObservers();      // Update UI
-        view.showEndOptions();        // Show play again / exit buttons
+        //view.showEndOptions();        // Show play again / exit buttons for later
     } 
     else if (command.equals("playAgain")) {
         view.resetGame();             // Reset everything for a new round

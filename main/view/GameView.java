@@ -82,7 +82,7 @@ public class GameView extends JFrame{
                 computerPlayer = new ComputerPlayer(100.0, strategy); // Bassam: create computer player
                 difficultyBox.setEnabled(false); // Bassam: disable dropdown after game starts
                 difficultyBox.setVisible(false);
-                drawPhaseButton.setVisible(true);
+                
             }
        });
       	initDrawButton.setBounds(600, 350, 200, 100);
@@ -167,6 +167,7 @@ public class GameView extends JFrame{
       	        public void mouseClicked(java.awt.event.MouseEvent evt) {
       	            cardsSelected[index] = !cardsSelected[index];
       	            cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null);
+      	            drawPhaseButton.setVisible(true);
       	        }
       	    });
 

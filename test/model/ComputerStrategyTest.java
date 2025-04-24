@@ -17,7 +17,7 @@ public class ComputerStrategyTest {
     public void testHardStrategyRaisesWithThreeOfAKind() { // Bassam: test HardStrategy raises with three of a kind
         ComputerStrategy strategy = new HardStrategy();
         List<Card> hand = Arrays.asList(
-            new Card("Hearts", "A"),
+            Card.getCard(null, null)
             new Card("Clubs", "A"),
             new Card("Diamonds", "A")
         );
