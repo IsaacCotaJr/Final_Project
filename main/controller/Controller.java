@@ -44,6 +44,10 @@ public class Controller implements ActionListener{
 	public void shuffleAndDeal() {
 		model.shuffleAndDeal();
 	}
+
+	public void addComputerPlayer(int index, ComputerPlayer cPlayer) {
+		model.addComputerPlayer(index, cPlayer);
+	}
 	// isaac
 }
 
