@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.JFrame;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Scanner;
+import javax.swing.JTextField;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +29,8 @@ public class GameView extends JFrame{
     private String selectedDifficulty = "Easy"; // Bassam: stores selected difficulty
     private ComputerPlayer computerPlayer; // Bassam: holds computer player instance
 	private ComputerPlayer computerPlayer2;
+    private JTextField raiseField;
+
 
 	private Controller controller;
 	private JPanel mainPanel = new JPanel();
@@ -52,6 +54,7 @@ public class GameView extends JFrame{
         this.setLayout(new BorderLayout());
         this.setUp();
     }
+
 	
 	private void setUp() {
         // Difficulty selection dropdown
@@ -186,9 +189,47 @@ public class GameView extends JFrame{
       	
       	// Add balance, bet amount labels here
       	
-      	
-      	
-      	
+     // --- Betting panel ---  Dwij
+      	JPanel betPanel = new JPanel();
+      	betPanel.setLayout(null);
+      	betPanel.setBounds(500, 400, 400, 100);
+
+      	// Fold button
+      	JButton foldBtn = new JButton("Fold");
+      	foldBtn.setActionCommand("bet_fold");
+      	foldBtn.setBounds(0,0,80,30);
+      	foldBtn.addActionListener(controller);
+      	betPanel.add(foldBtn);
+
+      	// Call button
+      	JButton callBtn = new JButton("Call");
+      	callBtn.setActionCommand("bet_call");
+      	callBtn.setBounds(90,0,80,30);
+      	callBtn.addActionListener(controller);
+      	betPanel.add(callBtn);
+
+      	// Check button (only on second round before any raise)
+      	JButton checkBtn = new JButton("Check");
+      	checkBtn.setActionCommand("bet_check");
+      	checkBtn.setBounds(180,0,80,30);
+      	checkBtn.addActionListener(controller);
+      	betPanel.add(checkBtn);
+
+      	// Raise field + button
+      	JTextField raiseField = new JTextField("0");
+      	raiseField.setBounds(0,40,80,30);
+      	betPanel.add(raiseField);
+      	JButton raiseBtn = new JButton("Raise");
+      	raiseBtn.setActionCommand("bet_raise");
+      	raiseBtn.setBounds(90,40,80,30);
+      	raiseBtn.addActionListener(controller);
+      	betPanel.add(raiseBtn);
+
+      	// expose getter for the field
+      	this.raiseField = raiseField;
+
+      	mainPanel.add(betPanel);
+
 		//adding a window listener for closing the app
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
@@ -228,6 +269,8 @@ public class GameView extends JFrame{
 	    // Re-initialize the game UI
 	    setUp();
 	}
+	
+	
 	// isaac
 //	private void setupCardLabels() {
 //	    playerCardLabels.clear();
@@ -276,6 +319,11 @@ public class GameView extends JFrame{
 	    //setupCardLabels();     // re-setup the labels with click listeners
 	    drawPhaseButton.setVisible(true); // now they can draw
 	}
+	
+	public String getRaiseFieldText() {
+	    return raiseField.getText();
+	}
+}
 	// isaac
 	
 	// Keep now for reference
@@ -299,4 +347,3 @@ public class GameView extends JFrame{
 //                    e.printStackTrace();
 //         }
 //    }
-}

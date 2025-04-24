@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import model.Card;
+import model.ComputerPlayer;
 import model.Model;
 import model.Observer;
 
@@ -24,6 +25,26 @@ public class Controller implements ActionListener{
         //model.notifyObservers();      // Update UI
         //view.showEndOptions();        // Show play again / exit buttons for later
     } 
+    
+    //Dwij
+    else if (command.equals("bet_fold")) {
+        model.placeBet("fold", 0);
+        model.advanceTurn();
+    }
+    else if (command.equals("bet_call")) {
+        model.placeBet("call", 0);
+        model.advanceTurn();
+    }
+    else if (command.equals("bet_check")) {
+        model.placeBet("check", 0);
+        model.advanceTurn();
+    }
+    else if (command.equals("bet_raise")) {
+        double raiseAmt = Double.parseDouble(view.getRaiseFieldText());
+        model.placeBet("raise", raiseAmt);
+        model.advanceTurn();
+    }
+    //Dwij
     else if (command.equals("playAgain")) {
         view.resetGame();             // Reset everything for a new round
     } 
