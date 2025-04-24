@@ -11,10 +11,10 @@ public class CardTest {
 	@Test
 	public void testGetters() {
 
-		Card c1 = new Card(Rank.DEUCE, Suit.CLUBS);
-		Card c2 = new Card(Rank.DEUCE, Suit.DIAMONDS);
-		Card c3 = new Card(Rank.THREE, Suit.CLUBS);
-		Card c4 = new Card(Rank.THREE, Suit.DIAMONDS);
+		Card c1 = Card.getCard(Rank.DEUCE, Suit.CLUBS);
+		Card c2 = Card.getCard(Rank.DEUCE, Suit.DIAMONDS);
+		Card c3 = Card.getCard(Rank.THREE, Suit.CLUBS);
+		Card c4 = Card.getCard(Rank.THREE, Suit.DIAMONDS);
 
 		assertEquals(Rank.DEUCE, c1.getRank());
 		assertEquals(Suit.CLUBS, c1.getSuit());
@@ -35,8 +35,8 @@ public class CardTest {
 
 	@Test
 	public void testCompareTo() {
-		Card c1 = new Card(Rank.DEUCE, Suit.CLUBS);
-		Card c2 = new Card(Rank.THREE, Suit.DIAMONDS);
+		Card c1 = Card.getCard(Rank.DEUCE, Suit.CLUBS);
+		Card c2 = Card.getCard(Rank.THREE, Suit.DIAMONDS);
 
 		assertTrue(c1.compareTo(c2) < 0);
 		assertTrue(c2.compareTo(c1) > 0);
@@ -45,10 +45,10 @@ public class CardTest {
 
 	@Test
 	public void testEquals() {
-		Card c1 = new Card(Rank.DEUCE, Suit.CLUBS);
-		Card c2 = new Card(Rank.THREE, Suit.DIAMONDS);
-		Card c3 = new Card(Rank.DEUCE, Suit.CLUBS);
-		Card c4 = new Card(Rank.THREE, Suit.DIAMONDS);
+		Card c1 = Card.getCard(Rank.DEUCE, Suit.CLUBS);
+		Card c2 = Card.getCard(Rank.THREE, Suit.DIAMONDS);
+		Card c3 = Card.getCard(Rank.DEUCE, Suit.CLUBS);
+		Card c4 = Card.getCard(Rank.THREE, Suit.DIAMONDS);
 
 		assertFalse(c1.equals(c2));
 		assertTrue(c1.equals(c3));
@@ -57,10 +57,10 @@ public class CardTest {
 
 	@Test
 	public void testEqualsOnTheHighSide() {
-		Card c1 = new Card(Rank.ACE, Suit.CLUBS);
-		Card c2 = new Card(Rank.KING, Suit.DIAMONDS);
-		Card c3 = new Card(Rank.ACE, Suit.CLUBS);
-		Card c4 = new Card(Rank.KING, Suit.DIAMONDS);
+		Card c1 = Card.getCard(Rank.ACE, Suit.CLUBS);
+		Card c2 = Card.getCard(Rank.KING, Suit.DIAMONDS);
+		Card c3 = Card.getCard(Rank.ACE, Suit.CLUBS);
+		Card c4 = Card.getCard(Rank.KING, Suit.DIAMONDS);
 
 		assertFalse(c1.equals(c2));
 		assertTrue(c1.equals(c3));

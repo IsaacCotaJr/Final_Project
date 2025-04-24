@@ -28,6 +28,8 @@ public class GameView extends JFrame{
     private JComboBox<String> difficultyBox; // Bassam: dropdown for selecting difficulty
     private String selectedDifficulty = "Easy"; // Bassam: stores selected difficulty
     private ComputerPlayer computerPlayer; // Bassam: holds computer player instance
+	private ComputerPlayer computerPlayer2;
+
 	private Controller controller;
 	private JPanel mainPanel = new JPanel();
 	private JButton initDrawButton;
@@ -80,6 +82,9 @@ public class GameView extends JFrame{
                 // Bassam: set computer player strategy based on selected difficulty
                 ComputerStrategy strategy = selectedDifficulty.equals("Easy") ? new EasyStrategy() : new HardStrategy(); // Bassam: choose strategy
                 computerPlayer = new ComputerPlayer(100.0, strategy); // Bassam: create computer player
+		computerPlayer2 = new ComputerPlayer(100.0, strategy);
+                controller.addComputerPlayer(0, computerPlayer);
+                controller.addComputerPlayer(1, computerPlayer2);
                 difficultyBox.setEnabled(false); // Bassam: disable dropdown after game starts
                 difficultyBox.setVisible(false);
                 
