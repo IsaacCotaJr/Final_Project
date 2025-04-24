@@ -2,7 +2,9 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import model.Card;
 import model.Model;
 import model.Observer;
 
@@ -19,7 +21,7 @@ public class Controller implements ActionListener{
 
     if (command.equals("initDraw")) {
         model.shuffleAndDeal();       // Draw cards
-        model.notifyObservers();      // Update UI
+        //model.notifyObservers();      // Update UI
         view.showEndOptions();        // Show play again / exit buttons
     } 
     else if (command.equals("playAgain")) {
@@ -33,5 +35,15 @@ public class Controller implements ActionListener{
 	public void addObserver(Observer observer) {
 		model.registerObserver(observer);
 	}
+
+	// isaac
+	public ArrayList<Card> drawNewCards(boolean[] toReplace) {
+		return model.drawNewCards(toReplace);
+	}
+	
+	public void shuffleAndDeal() {
+		model.shuffleAndDeal();
+	}
+	// isaac
 }
 
