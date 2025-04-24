@@ -1,4 +1,4 @@
-
+/* Updated Deck.java to use Card.getCard */
 package model;
 
 import java.util.*;
@@ -11,10 +11,9 @@ public class Deck {
 		cards = new ArrayList<>();
 		for (Suit suit : Suit.values()) {
 			for (Rank rank : Rank.values()) {
-				cards.add(new Card(rank, suit));
+				cards.add(Card.getCard(rank, suit)); // Use flyweight access method
 			}
 		}
-
 	}
 
 	public List<Card> getDeck() {
@@ -27,7 +26,6 @@ public class Deck {
 	}
 
 	public List<Card> dealPlayerCards() {
-		// TODO Auto-generated method stub
 		List<Card> playerCards = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			playerCards.add(cards.remove(0));
@@ -38,4 +36,4 @@ public class Deck {
 	public Card draw() {
 		return cards.remove(0);
 	}
-}
+} 

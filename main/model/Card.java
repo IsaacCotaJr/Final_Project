@@ -1,3 +1,4 @@
+/* Updated Card.java using Flyweight Pattern */
 package model;
 
 import java.util.HashMap;
@@ -8,33 +9,47 @@ public class Card implements Comparable<Card> {
 	private final Rank rank;
 	private final Suit suit;
 
-	public Card(Rank rank, Suit suit) {
+	// Flyweight store
+	private static final Card[][] cardPool = new Card[Rank.values().length][Suit.values().length];
+
+	// Private constructor for flyweight
+	private Card(Rank rank, Suit suit) {
 		this.rank = rank;
 		this.suit = suit;
+	}
+
+	// Static initializer block to populate card pool
+	static {
+		for (Rank rank : Rank.values()) {
+			for (Suit suit : Suit.values()) {
+				cardPool[rank.ordinal()][suit.ordinal()] = new Card(rank, suit);
+			}
+		}
+	}
+
+	// Access method
+	public static Card getCard(Rank rank, Suit suit) {
+		return cardPool[rank.ordinal()][suit.ordinal()];
 	}
 
 	@Override
 	public int compareTo(Card other) {
 		return this.rank.compareTo(other.rank);
-
 	}
 
 	public boolean equals(Card other) {
-		return rank == other.rank;
+		return rank == other.rank && suit == other.suit;
 	}
 
 	public Rank getRank() {
-		// TODO Auto-generated method stub
 		return rank;
 	}
 
 	public Suit getSuit() {
-		// TODO Auto-generated method stub
 		return suit;
 	}
 
 	public Object getValue() {
-		// TODO Auto-generated method stub
 		return (Integer) rank.getValue();
 	}
 
@@ -46,11 +61,9 @@ public class Card implements Comparable<Card> {
 		suitSymbols.put(Suit.SPADES, "\u2660");
 	}
 
+	@Override
 	public String toString() {
-		// Use unicode values in the starter code to show the icons for the four suits.
-		// For example '\u2663' prints as ♣
 		String suitSymbol = suitSymbols.getOrDefault(suit, "");
 		return rank.getValue() + suitSymbol;
-
 	}
 }
