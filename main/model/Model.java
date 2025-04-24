@@ -23,6 +23,10 @@ public class Model {
 		players.add(new Player(100.00, true));
 		this.deck = new Deck();
 	}
+
+	public void addComputerPlayer(int index, ComputerPlayer cPlayer) {
+		players.set(index, cPlayer);
+	}
 	
 	public void registerObserver(Observer observer) {
 		this.observers.add(observer);
@@ -74,6 +78,14 @@ public class Model {
 	    notifyObservers();
 	    return newCards;
 	}
+
+	// for testing
+		public ArrayList<Observer> getObservers(){
+			return this.observers;
+		}
+		public ArrayList<Player> getPlayers(){
+			return this.players;
+		}
 	// isaac
 	
 	/* PRIVATE METHODS */
