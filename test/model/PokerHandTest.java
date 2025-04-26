@@ -165,9 +165,9 @@ public class PokerHandTest {
         ));
         ArrayList<Card> strList2 = new ArrayList<>(Arrays.asList(
             c(Rank.FOUR, Suit.CLUBS),
-            c(Rank.FIVE, Suit.CLUBS),
+            c(Rank.FIVE, Suit.HEARTS),
             c(Rank.SIX, Suit.CLUBS),
-            c(Rank.SEVEN, Suit.CLUBS),
+            c(Rank.SEVEN, Suit.SPADES),
             c(Rank.EIGHT, Suit.CLUBS)
         ));
         PokerHand straight1 = new PokerHand(strList1);

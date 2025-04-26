@@ -15,6 +15,7 @@ class PlayerTest {
 	@Test
 	void isHumanTrue() {
 		assertTrue(p.isHuman());
+		assertTrue(p.toString().equals("true"));
 	}
 	
 	@Test
@@ -67,12 +68,19 @@ class PlayerTest {
 	@Test
 	void discardCardTest() {
 		ArrayList<Card> hand = new ArrayList<Card>();
+		hand.add(Card.getCard(Rank.ACE, Suit.CLUBS));
 		p.setHand(hand);
-		List<Card> h = p.getHand();
+		
+		p.discardCard(0);
+		assertTrue(p.getHand().size() == 0);
 	}
 	
 	@Test
 	void drawCardTest() {
+		ArrayList<Card> hand = new ArrayList<Card>();
+		p.setHand(hand);
 		
+		p.drawCard(Card.getCard(Rank.TEN, Suit.HEARTS));
+		assertTrue(p.getHand().size() == 1);
 	}
 }

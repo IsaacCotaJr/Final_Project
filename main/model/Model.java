@@ -94,22 +94,6 @@ public class Model {
             notifyObservers();
         }
     }
-
-    public boolean isFirstBettingRound() {
-        return firstBettingRound;
-    }
-
-//    public int getCurrentPlayerIndex() {
-//        return currentPlayerIndex;
-//    }
-
-    public double getPot() {
-        return pot;
-    }
-
-    public double getCurrentBet() {
-        return currentBet;
-    }
     /*** End new betting methods ***/
 
     public void registerObserver(Observer observer) {
@@ -145,7 +129,6 @@ public class Model {
         }
         for (int i = 0; i < 15; i++) {
             Card c = allPlayerCards.get(i);
-            System.out.println(c);
             CardLabel cl = (CardLabel) observers.get(i);
             cl.setCardType(c);
             cl.showFace();

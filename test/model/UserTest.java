@@ -17,10 +17,10 @@ class UserTest {
 	}
 	
 	@Test
-	void fillLibraryTest() {
-		User dTrump = new User("Donald_Trump");
-		dTrump.fillBalanceFromTxt();
-		assertEquals(dTrump.getBalance(), 100);
+	void fillBalanceTest() {
+		User kHarris = new User("Kamala_Harris", "yes", 100.0);
+		kHarris.fillBalanceFromTxt();
+		assertTrue(kHarris.getBalance() - 100 < 0.00001);
 	}
 	
 	@Test
@@ -39,6 +39,13 @@ class UserTest {
 	void getSaltStringTest() {
 		User dTrump = new User("Donald_Trump");
 		assertEquals(dTrump.getSaltString(), "aRxf8h/hbdVloF6QLkxB6w==");
+	}
+	
+	@Test
+	void setBalanceTest() {
+		User jdVance = new User("Vance", "no", 100.0);
+		jdVance.setBalance(100000000.0);
+		assertTrue(jdVance.getBalance() - 100000000.0 < 0.0001);
 	}
 	
 	@Test
