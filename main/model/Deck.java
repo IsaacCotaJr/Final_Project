@@ -25,8 +25,8 @@ public class Deck {
 		return cards;
 	}
 
-	public List<Card> dealPlayerCards() {
-		List<Card> playerCards = new ArrayList<>();
+	public ArrayList<Card> dealPlayerCards() {
+		ArrayList<Card> playerCards = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			playerCards.add(cards.remove(0));
 		}

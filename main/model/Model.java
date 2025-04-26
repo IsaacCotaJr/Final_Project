@@ -1,18 +1,18 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Model {
     private ArrayList<Observer> observers;
     private Deck deck;
     private User user;
-    private double betAmount;
     private double userBal;
     private ArrayList<Player> players;
+    private Game g = new Game(); //used to determine best hands 
+    private final HashMap<Player, PokerHand> playerHands = new HashMap<>();
 
     // New betting fields
-    private int currentPlayerIndex;
     private double pot;
     private double currentBet;
     private boolean firstBettingRound;
@@ -21,87 +21,87 @@ public class Model {
         this.user = u;
         this.observers = new ArrayList<Observer>();
         this.players = new ArrayList<Player>();
-        for (int i = 0; i < 2; i++) {
-            players.add(new Player(100.00, false));
-        }
-        players.add(new Player(100.00, true));
-        this.deck = new Deck();
+        this.userBal = user.getBalance();
 
+        players.add(new Player(userBal, true)); // add human player, comp players added later
         // Initialize betting state
-        this.betAmount = 0;
-        this.userBal   = players.get(players.size() - 1).getBalance();
+        
         startBettingRound();
+    }
+    
+    public void createCompPlayers(String diff) {
+    	String selectedDifficulty = diff;
+    	ComputerStrategy strategy = selectedDifficulty.equals("Easy") ? new EasyStrategy() : new HardStrategy(); // Bassam: choose strategy
+    	for (int i = 0; i < 2; i++) {
+            players.add(new ComputerPlayer(100.00, strategy));
+        }
     }
 
     /*** New betting methods ***/
     public void startBettingRound() {
-        this.currentPlayerIndex  = 0;
         this.pot                 = 0;
         this.currentBet          = 0;
         this.firstBettingRound   = true;
-        this.betAmount           = currentBet;
-        this.userBal             = players.get(players.size() - 1).getBalance();
+        this.userBal             = players.get(0).getBalance();
         notifyObservers();
     }
 
-    public void placeBet(String action, double amount) {
-        Player p = players.get(currentPlayerIndex);
+    public void placeBet(String action, double amount, int index) {
+        Player p = players.get(index);
         switch (action) {
             case "fold":
                 p.setFold(true);
                 break;
             case "call":
-                p.subFromBalance(currentBet);
-                pot += currentBet;
+                p.subFromBalance(this.currentBet);
+                this.pot += this.currentBet;
                 break;
             case "raise":
-                if (amount <= currentBet) {
-                    amount = currentBet + 1;
+                if (amount < this.currentBet) {
+                    amount = this.currentBet;
                 }
-                currentBet = amount;
+                this.currentBet = amount;
                 p.subFromBalance(amount);
-                pot += amount;
+                this.pot += amount;
                 break;
             case "check":
                 // no change to pot or balances
                 break;
         }
         // update what observers see
-        this.betAmount = currentBet;
-        this.userBal   = players.get(players.size() - 1).getBalance();
+        this.userBal = players.get(0).getBalance();
         notifyObservers();
     }
 
     public void advanceTurn() {
         int total = players.size();
-        currentPlayerIndex = (currentPlayerIndex + 1) % total;
+        
+//        // if we've wrapped back to index 0, end the current betting round
+//        if (currentPlayerIndex == 0) {
+//            if (firstBettingRound) {
+//                firstBettingRound = false;
+//            }
+//            // else: both betting rounds are done
+//        }
 
-        // skip any folded players
-        for (int i = 0; i < total; i++) {
-            if (!players.get(currentPlayerIndex).getFold()) {
-                break;
+        // go through computer players
+        for (int i = 1; i < total; i++) {
+            if (!players.get(i).getFold()) {
+            	ComputerPlayer p = (ComputerPlayer) players.get(i);
+            	String s = p.decideMove(this.pot, this.currentBet);
+            	placeBet(s, 10.0, i);
             }
-            currentPlayerIndex = (currentPlayerIndex + 1) % total;
+            notifyObservers();
         }
-
-        // if we've wrapped back to index 0, end the current betting round
-        if (currentPlayerIndex == 0) {
-            if (firstBettingRound) {
-                firstBettingRound = false;
-            }
-            // else: both betting rounds are done
-        }
-
-        notifyObservers();
     }
 
     public boolean isFirstBettingRound() {
         return firstBettingRound;
     }
 
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
+//    public int getCurrentPlayerIndex() {
+//        return currentPlayerIndex;
+//    }
 
     public double getPot() {
         return pot;
@@ -112,10 +112,6 @@ public class Model {
     }
     /*** End new betting methods ***/
 
-    public void addComputerPlayer(int index, ComputerPlayer cPlayer) {
-        players.set(index, cPlayer);
-    }
-
     public void registerObserver(Observer observer) {
         this.observers.add(observer);
     }
@@ -123,19 +119,34 @@ public class Model {
     public void deregisterObserver(Observer observer) {
         this.observers.remove(observer);
     }
+    
+    public void emptyObservers() {
+    	ArrayList<Observer> toDeregister = new ArrayList<Observer>();
+    	for (Observer o: observers) {
+    		toDeregister.add(o);
+    	}
+    	for (Observer ob: toDeregister) {
+    		deregisterObserver(ob);
+    	}
+    }
 
+    public void resetGame() {
+    	notifyObservers(); // not sure this does anything, just in case
+    }
+    
     public void shuffleAndDeal() {
+    	this.deck = new Deck(); // so that a new deck is created every game
         deck.shuffle();
         ArrayList<Card> allPlayerCards = new ArrayList<Card>();
         for (Player player : players) {
-            List<Card> hand = deck.dealPlayerCards();
+            ArrayList<Card> hand = deck.dealPlayerCards();
             player.setHand(hand);
             allPlayerCards.addAll(hand);
         }
         for (int i = 0; i < 15; i++) {
             Card c = allPlayerCards.get(i);
-            CardLabel cl = (CardLabel) observers.get(i);
             System.out.println(c);
+            CardLabel cl = (CardLabel) observers.get(i);
             cl.setCardType(c);
             cl.showFace();
         }
@@ -144,13 +155,12 @@ public class Model {
 
     public ArrayList<Card> drawNewCards(boolean[] toReplace) {
         ArrayList<Card> newCards = new ArrayList<>();
-        Player user = players.get(players.size() - 1);
-        List<Card> hand = user.getHand();
+        Player pl = players.get(0);
+        ArrayList<Card> hand = pl.getHand();
 
         for (int i = 0; i < 5; i++) {
-            int obsIndex = i + 10;
             if (toReplace[i]) {
-                CardLabel cl = (CardLabel) observers.get(obsIndex);
+                CardLabel cl = (CardLabel) observers.get(i);
                 Card newCard = deck.draw();
                 cl.setCardType(newCard);
                 newCards.add(newCard);
@@ -158,9 +168,46 @@ public class Model {
             }
         }
 
-        user.setHand(hand);
+        pl.setHand(hand);
         notifyObservers();
         return newCards;
+    }
+    
+    public String gameOver() {
+    	String result = "";
+    	ArrayList<Player> winners = new ArrayList<Player>();
+    	// Go through players, see which had best hand
+    	for (Player p : players) {
+    		if (p.getFold()) {
+    			continue;
+    		}
+
+    		PokerHand ph = new PokerHand(p.getHand());
+    		playerHands.put(p, ph);
+    	}
+    	
+    	winners = g.determineWinner(playerHands);
+    	
+    	// add winnings to balance
+		for (Player win : winners) {
+			win.addToBalance(pot/(winners.size()));
+		}
+		
+		if (winners.contains(players.get(0))) {
+			// human player won, return that they won
+			// update user object's balance
+			result = "won";
+			user.setBalance(players.get(0).getBalance());
+			user.saveUserToFile();
+		}
+		else {
+			// human player lost, return that they won
+			// update user object's balance
+			result = "lost";
+			user.setBalance(players.get(0).getBalance());
+			user.saveUserToFile();
+		}
+    	return result;
     }
 
     // for testing
@@ -174,7 +221,7 @@ public class Model {
     /* PRIVATE METHODS */
     private void notifyObservers() {
         for (Observer o : observers) {
-            o.update(betAmount, userBal);
+            o.update(currentBet, userBal, pot);
         }
     }
 }

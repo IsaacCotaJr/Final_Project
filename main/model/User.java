@@ -16,7 +16,6 @@ public class User {
 	private String hashedPassword;
 	private String saltString;
 	private byte[] salt;
-	public Player player;
 	private double balance;
 
 	// Used when first creating a user
@@ -49,7 +48,6 @@ public class User {
             this.hashedPassword = l[1];
             this.saltString = l[2];
             this.salt = Base64.getDecoder().decode(saltString);
-            createPlayer();
             
             in.close();
 		} 
@@ -103,8 +101,8 @@ public class User {
 		return balance;
 	}
 	
-	public void createPlayer() {
-		this.player = new Player(balance, true);
+	public void setBalance(double b) {
+		this.balance = b;
 	}
 	
 	// called when a user logs in in the View, so that we don't try to fill in each library

@@ -9,11 +9,11 @@ import java.util.*;
 
 public class PokerHand implements Comparable<PokerHand> {
 
-	private final List<Card> cards;
+	private final ArrayList<Card> cards;
 
-	public PokerHand(Card c1, Card c2, Card c3, Card c4, Card c5) {
+	public PokerHand(ArrayList<Card> cs) {
 		// TODO: Build class PokerHand, a week long project
-		this.cards = Arrays.asList(c1, c2, c3, c4, c5);
+		this.cards = cs;
 		Collections.sort(this.cards);
 	}
 

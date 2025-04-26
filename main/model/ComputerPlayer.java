@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 public class ComputerPlayer extends Player {
     private ComputerStrategy strategy;
 
@@ -14,7 +12,7 @@ public class ComputerPlayer extends Player {
         this.strategy = strategy;
     }
 
-    public String decideMove(List<Card> communityCards, double pot, double currentBet) {
-        return strategy.decideMove(getHand(), communityCards, pot, currentBet, getBalance());
+    public String decideMove(double pot, double currentBet) {
+        return strategy.decideMove(getHand(), pot, currentBet, getBalance());
     }
 }

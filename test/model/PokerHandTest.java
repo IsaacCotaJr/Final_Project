@@ -6,12 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import model.Card;
-import model.HandRank;
-import model.PokerHand;
-import model.Rank;
-import model.Suit;
-
 public class PokerHandTest {
 
     private Card c(Rank rank, Suit suit) {

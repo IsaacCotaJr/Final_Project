@@ -1,23 +1,14 @@
 package view;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Scanner;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import controller.Controller;
 import model.*;
 import database.*;
 
 public class View {
-	private Controller controller;
 	private UserRegistry uR;
 	private User u;
 	private GameView game;

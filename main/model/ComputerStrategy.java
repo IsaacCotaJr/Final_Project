@@ -12,5 +12,5 @@ public interface ComputerStrategy {
      * @param balance The computer's balance
      * @return String representing the move: "fold", "call", "raise"
      */
-    String decideMove(List<Card> hand, List<Card> communityCards, double pot, double currentBet, double balance);
+    String decideMove(List<Card> hand, double pot, double currentBet, double balance);
 }

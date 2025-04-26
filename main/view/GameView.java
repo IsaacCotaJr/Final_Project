@@ -31,6 +31,12 @@ public class GameView extends JFrame{
 	private ComputerPlayer computerPlayer2;
     private JTextField raiseField;
 
+    private UsersBalanceLabel balance;
+    private BetAmountLabel betAmount;
+    private PotLabel potLabel;
+    private JLabel instLabel;
+    // number to keep track of how many times bet placed
+ 	int count = 0;
 
 	private Controller controller;
 	private JPanel mainPanel = new JPanel();
@@ -57,11 +63,18 @@ public class GameView extends JFrame{
 
 	
 	private void setUp() {
+		// number to keep track of how many times bet placed
+		count = 0;
+		
         // Difficulty selection dropdown
         String[] difficulties = {"Easy", "Hard"};
         difficultyBox = new JComboBox<>(difficulties); // Bassam: create difficulty dropdown
         difficultyBox.setBounds(600, 250, 200, 40);
         difficultyBox.addActionListener(e -> selectedDifficulty = (String) difficultyBox.getSelectedItem()); // Bassam: update selected difficulty
+        
+        // send difficulty to controller to create ComputerPlayers
+        controller.createCompPlayers(selectedDifficulty);
+        
         mainPanel.add(difficultyBox); // Bassam: add dropdown to UI
         // Hide end-of-game buttons at setup
         if (playAgainButton != null) playAgainButton.setVisible(false);
@@ -73,6 +86,107 @@ public class GameView extends JFrame{
 
         add(mainPanel);
         
+        // Add balance, bet amount, pot labels here
+      	balance = new UsersBalanceLabel(u.getBalance());
+      	balance.setBounds(1000, 600, 400, 50);
+      	balance.setForeground(Color.WHITE);
+      	mainPanel.add(balance);
+      	
+      	betAmount = new BetAmountLabel();
+      	betAmount.setBounds(500, 300, 400, 50);
+      	betAmount.setForeground(Color.WHITE);
+      	mainPanel.add(betAmount);
+      	
+      	potLabel = new PotLabel();
+      	potLabel.setBounds(1000, 300, 400, 50);
+      	potLabel.setForeground(Color.WHITE);
+      	mainPanel.add(potLabel);
+      	
+      	// Label to give instructions
+      	instLabel = new JLabel();
+      	instLabel.setBounds(500, 250, 400, 50);
+      	instLabel.setForeground(Color.WHITE);
+      	instLabel.setVisible(false);
+      	mainPanel.add(instLabel);
+      	
+      	// --- Betting panel ---  Dwij
+      	JPanel betPanel = new JPanel();
+      	betPanel.setLayout(null);
+      	betPanel.setBounds(500, 350, 400, 100);
+
+      	// Fold button
+      	JButton foldBtn = new JButton("Fold");
+      	foldBtn.setActionCommand("bet_fold");
+      	foldBtn.setBounds(0,0,80,30);
+      	foldBtn.addActionListener(controller);
+      	betPanel.add(foldBtn);
+
+      	// Check button (only on second round before any raise)
+      	JButton checkBtn = new JButton("Check");
+      	checkBtn.setActionCommand("bet_check");
+      	checkBtn.setBounds(90,0,80,30);
+      	checkBtn.addActionListener(controller);
+      	checkBtn.addActionListener(new ActionListener() {
+      		// make bet Panel invisible and disable
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				betPanel.setVisible(false);
+				betPanel.setEnabled(false);
+				// make second draw button visible
+				drawPhaseButton.setVisible(true);
+				
+				//update count
+				if (count == 1) {
+					gameOver();
+				}
+				else {
+					// make instLabel visible
+					instLabel.setText("Select the cards to discard, then click Draw New Cards");
+					instLabel.setVisible(true);
+					count++;
+				}
+			}
+      	});
+      	betPanel.add(checkBtn);
+
+      	// Raise field + button
+      	JTextField raiseField = new JTextField("0");
+      	raiseField.setBounds(0,40,80,30);
+      	betPanel.add(raiseField);
+      	JButton raiseBtn = new JButton("Bet");
+      	raiseBtn.setActionCommand("bet_raise");
+      	raiseBtn.setBounds(90,40,80,30);
+      	raiseBtn.addActionListener(controller);
+      	raiseBtn.addActionListener(new ActionListener() {
+      		// make bet Panel invisible and disable
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				betPanel.setVisible(false);
+				betPanel.setEnabled(false);
+				// make second draw button visible
+				drawPhaseButton.setVisible(true);
+				
+				//update count
+				if (count == 1) {
+					gameOver();
+				}
+				else {
+					// make instLabel visible
+					instLabel.setText("Select the cards to discard, then click Draw New Cards");
+					instLabel.setVisible(true);
+					count++;
+				}
+			}
+      	});
+      	betPanel.add(raiseBtn);
+
+      	// expose getter for the field
+      	this.raiseField = raiseField;
+      	
+      	betPanel.setVisible(false); // will be set visible at appropriate times
+
+      	mainPanel.add(betPanel);
+        
         //setting up the draw button
       	initDrawButton = new JButton("Draw Cards"); 
       	initDrawButton.setActionCommand("initDraw");
@@ -82,24 +196,23 @@ public class GameView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 initDrawButton.setVisible(false);
-                // Bassam: set computer player strategy based on selected difficulty
-                ComputerStrategy strategy = selectedDifficulty.equals("Easy") ? new EasyStrategy() : new HardStrategy(); // Bassam: choose strategy
-                computerPlayer = new ComputerPlayer(100.0, strategy); // Bassam: create computer player
-		computerPlayer2 = new ComputerPlayer(100.0, strategy);
-                controller.addComputerPlayer(0, computerPlayer);
-                controller.addComputerPlayer(1, computerPlayer2);
                 difficultyBox.setEnabled(false); // Bassam: disable dropdown after game starts
                 difficultyBox.setVisible(false);
                 
+                // make betting panel visible
+                betPanel.setVisible(true);
+                
+                // make instLabel visible
+				instLabel.setText("Choose whether to bet, call, check, or fold");
+				instLabel.setVisible(true);
             }
        });
       	initDrawButton.setBounds(600, 350, 200, 100);
       	mainPanel.add(initDrawButton);
       	
       	// isaac
-      	//setupCardLabels();                      // show cards, can't select yet
-      	drawPhaseButton.setVisible(false);     // hide draw button until betting finishes
       	drawPhaseButton = new JButton("Draw New Cards");
+      	drawPhaseButton.setVisible(false);     // hide draw button until betting finishes
       	drawPhaseButton.setBounds(600, 350, 200, 50);
       	mainPanel.add(drawPhaseButton);
       	
@@ -110,19 +223,26 @@ public class GameView extends JFrame{
       	    @Override
       	    public void actionPerformed(ActionEvent e) {
       	        performDrawPhase();
+      	        // set betPanel visible again
+      	        betPanel.setVisible(true);
+      	        
+      	        // make instLabel visible
+				instLabel.setText("Choose whether to bet, call, check, or fold");
+				instLabel.setVisible(true);
       	    }
       	});
       	// isaac
 		
       	playAgainButton = new JButton("Play Again");
 		// Bassam
-      	playAgainButton.setActionCommand("playAgain"); 
-      	playAgainButton.addActionListener(new ActionListener () {
-      		@Override
-      		public void actionPerformed(ActionEvent e) {
-      			setUp();
-      		}
-      	});
+      	playAgainButton.setActionCommand("playAgain");
+      	playAgainButton.addActionListener(controller);
+//      	playAgainButton.addActionListener(new ActionListener () {
+//      		@Override
+//      		public void actionPerformed(ActionEvent e) {
+//      			resetGame();
+//      		}
+//      	});
       	playAgainButton.setBounds(550, 450, 150, 50);
       	playAgainButton.setVisible(false);
       	mainPanel.add(playAgainButton);
@@ -141,6 +261,31 @@ public class GameView extends JFrame{
       	mainPanel.add(exitButton); 
 		// Bassam
 		
+      	JPanel playerHand = new JPanel(); // isaac commented this out to make it private variable in GameView to make it accessible to other functions
+      	playerHand.setLayout(new GridLayout(1,5));
+      	for (int i = 0; i < 5; i++) {
+      		CardLabel cl = new CardLabel(); 
+      		controller.addObserver(cl);
+      		
+      		//isaac
+      		final int index = i;
+      		
+      		// show selected (clicked) cards
+      		cl.addMouseListener(new java.awt.event.MouseAdapter() {
+      	        public void mouseClicked(java.awt.event.MouseEvent evt) {
+      	            cardsSelected[index] = !cardsSelected[index];
+      	            cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null);
+      	        }
+      	    });
+
+      	    playerCardLabels.add(cl);
+      	    playerHand.add(cl);
+      	    // isaac
+      	}
+      	
+      	playerHand.setBounds(387, 500, 625, 200);
+      	mainPanel.add(playerHand);
+      	
       	JPanel compHand1 = new JPanel();
       	compHand1.setLayout(new GridLayout(1,5));
       	for (int i = 0; i < 5; i++) {
@@ -161,74 +306,10 @@ public class GameView extends JFrame{
       	compHand2.setBounds(775, 0, 625, 200);
       	mainPanel.add(compHand2);
       	
-      	JPanel playerHand = new JPanel(); // isaac commented this out to make it private variable in GameView to make it accessible to other functions
-      	playerHand.setLayout(new GridLayout(1,5));
-      	for (int i = 0; i < 5; i++) {
-      		CardLabel cl = new CardLabel(); 
-      		controller.addObserver(cl);
-      		
-      		//isaac
-      		final int index = i;
-      		
-      		// show selected (clicked) cards
-      		cl.addMouseListener(new java.awt.event.MouseAdapter() {
-      	        public void mouseClicked(java.awt.event.MouseEvent evt) {
-      	            cardsSelected[index] = !cardsSelected[index];
-      	            cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null);
-      	            drawPhaseButton.setVisible(true);
-      	        }
-      	    });
-
-      	    playerCardLabels.add(cl);
-      	    playerHand.add(cl);
-      	    // isaac
-      	}
-      	
-      	playerHand.setBounds(387, 500, 625, 200);
-      	mainPanel.add(playerHand);
-      	
-      	// Add balance, bet amount labels here
-      	
-     // --- Betting panel ---  Dwij
-      	JPanel betPanel = new JPanel();
-      	betPanel.setLayout(null);
-      	betPanel.setBounds(500, 400, 400, 100);
-
-      	// Fold button
-      	JButton foldBtn = new JButton("Fold");
-      	foldBtn.setActionCommand("bet_fold");
-      	foldBtn.setBounds(0,0,80,30);
-      	foldBtn.addActionListener(controller);
-      	betPanel.add(foldBtn);
-
-      	// Call button
-      	JButton callBtn = new JButton("Call");
-      	callBtn.setActionCommand("bet_call");
-      	callBtn.setBounds(90,0,80,30);
-      	callBtn.addActionListener(controller);
-      	betPanel.add(callBtn);
-
-      	// Check button (only on second round before any raise)
-      	JButton checkBtn = new JButton("Check");
-      	checkBtn.setActionCommand("bet_check");
-      	checkBtn.setBounds(180,0,80,30);
-      	checkBtn.addActionListener(controller);
-      	betPanel.add(checkBtn);
-
-      	// Raise field + button
-      	JTextField raiseField = new JTextField("0");
-      	raiseField.setBounds(0,40,80,30);
-      	betPanel.add(raiseField);
-      	JButton raiseBtn = new JButton("Raise");
-      	raiseBtn.setActionCommand("bet_raise");
-      	raiseBtn.setBounds(90,40,80,30);
-      	raiseBtn.addActionListener(controller);
-      	betPanel.add(raiseBtn);
-
-      	// expose getter for the field
-      	this.raiseField = raiseField;
-
-      	mainPanel.add(betPanel);
+      	// add labels to observers
+      	controller.addObserver(balance);
+      	controller.addObserver(betAmount);
+      	controller.addObserver(potLabel);
 
 		//adding a window listener for closing the app
 		this.addWindowListener(new WindowAdapter() {
@@ -240,6 +321,24 @@ public class GameView extends JFrame{
 		
 		this.setVisible(true);
 	}
+	
+	// Should decide if player won or lost, change balance accordingly in model
+	public void gameOver() {
+		showEndOptions();
+		String s = controller.gameOver();
+		
+		if(s.equalsIgnoreCase("won")) {
+			// make instLabel visible
+			instLabel.setText("You Won!");
+			instLabel.setVisible(true);
+		}
+		else {
+			// make instLabel visible
+			instLabel.setText("You Lost!");
+			instLabel.setVisible(true);
+		}
+	}
+	
 	// Bassam: Show end-of-game options (Play Again, Exit)
 	public void showEndOptions() {
 	    // Hide main game controls
@@ -253,7 +352,9 @@ public class GameView extends JFrame{
 
 	// Bassam: Reset the game for a new round
 	public void resetGame() {
-	    // Remove all components from the main panel
+		// This is disabling draw cards showing, will fix
+		
+	    //Remove all components from the main panel
 	    if (mainPanel != null) {
 	        mainPanel.removeAll();
 	        mainPanel.revalidate();
@@ -263,41 +364,14 @@ public class GameView extends JFrame{
 	    canSelectCards = false;
 	    for (int i = 0; i < cardsSelected.length; i++) cardsSelected[i] = false;
 	    playerCardLabels.clear();
-	    // Hide end-of-game buttons
+	    //empty Observers
+		controller.emptyObservers();
+		// Hide end-of-game buttons
 	    if (playAgainButton != null) playAgainButton.setVisible(false);
 	    if (exitButton != null) exitButton.setVisible(false);
 	    // Re-initialize the game UI
 	    setUp();
 	}
-	
-	
-	// isaac
-//	private void setupCardLabels() {
-//	    playerCardLabels.clear();
-//	    playerHand.removeAll(); // in case re-setting the layout
-//
-//	    for (int i = 0; i < 5; i++) {
-//	        CardLabel cl = new CardLabel(); 
-//	        controller.addObserver(cl);
-//	        final int index = i;
-//
-//	        // only add listener if selection is enabled
-//	        if (canSelectCards) {
-//	            cl.addMouseListener(new java.awt.event.MouseAdapter() {
-//	                public void mouseClicked(java.awt.event.MouseEvent evt) {
-//	                    cardsSelected[index] = !cardsSelected[index];
-//	                    cl.setBorder(cardsSelected[index] ? BorderFactory.createLineBorder(Color.YELLOW, 3) : null); // add yellow border on selected cards
-//	                }
-//	            });
-//	        }
-//
-//	        playerCardLabels.add(cl);
-//	        playerHand.add(cl);
-//	    }
-//
-//	    playerHand.revalidate();
-//	    playerHand.repaint();
-//	}
 	
 	private void performDrawPhase() {
 	    ArrayList<Card> newCards = controller.drawNewCards(cardsSelected);
@@ -324,26 +398,3 @@ public class GameView extends JFrame{
 	    return raiseField.getText();
 	}
 }
-	// isaac
-	
-	// Keep now for reference
-//	String fileStart = "./main/model/CardPhotos/";
-//    String file1 = fileStart + "ace" + "_of_" + "hearts" + ".png";
-//    
-//    for (String filename: files) {
-//    	try {
-//        	BufferedImage cardImage = ImageIO.read(new File(filename));
-//                    
-//            Image resizedImage = cardImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-//            ImageIcon resizedIcon = new ImageIcon(resizedImage);
-//            JLabel cardLabel = new JLabel(resizedIcon);
-//                    
-//                 // Set the position of the image within the JLabel
-//            cardLabel.setHorizontalAlignment(SwingConstants.CENTER); // Options: LEFT, CENTER, RIGHT
-//            cardLabel.setVerticalAlignment(SwingConstants.BOTTOM);   // Options: TOP, CENTER, BOTTOM
-//            
-//            mainPanel.add(cardLabel);
-//         } catch (IOException e) {
-//                    e.printStackTrace();
-//         }
-//    }

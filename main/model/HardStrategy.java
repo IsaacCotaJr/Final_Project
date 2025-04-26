@@ -4,7 +4,7 @@ import java.util.List;
 
 public class HardStrategy implements ComputerStrategy {
     @Override
-    public String decideMove(List<Card> hand, List<Card> communityCards, double pot, double currentBet, double balance) {
+    public String decideMove(List<Card> hand, double pot, double currentBet, double balance) {
         // Hard: call/raise with strong hands, fold with weak hands
         int pairs = countPairs(hand);
         boolean hasThree = hasThreeOfAKind(hand);

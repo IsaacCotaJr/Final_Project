@@ -5,7 +5,7 @@ import java.util.*;
 public class Player {
 	
 	private double balance;
-	private List<Card> hand;
+	private ArrayList<Card> hand;
 	public boolean fold = false;
 	private boolean isHuman;
 	
@@ -18,11 +18,11 @@ public class Player {
 		return isHuman;
 	}
 	
-	public void setHand(List<Card> hand) {
+	public void setHand(ArrayList<Card> hand) {
 		this.hand = hand;
 	}
 	
-	public List<Card> getHand() {
+	public ArrayList<Card> getHand() {
 		return hand;
 	}
 	
@@ -58,4 +58,8 @@ public class Player {
 		hand.add(card);
 	}
 
+	@Override
+	public String toString() {
+		return "" + isHuman;
+	}
 }

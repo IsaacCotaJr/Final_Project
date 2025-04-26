@@ -39,12 +39,12 @@ public class CardLabel extends JLabel implements Observer{
 	}
 	
 	@Override
-	public void update(double num, double num2) {
+	public void update(double num, double num2, double num3) {
 		String fileStart = "./main/model/CardPhotos";
 		// Change the image
 		if (showFace) {
 			try {
-				// initialize as the back of a card
+				// match number to card
 				String s = "";
 				if(rank == 11) {
 					s = "jack";
